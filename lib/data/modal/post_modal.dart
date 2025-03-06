@@ -1,3 +1,5 @@
+import 'package:clean_architecture_provider/domain/entity/post.dart';
+
 class PostModal{
   final int userId;
   final int id;
@@ -12,6 +14,9 @@ class PostModal{
       title: json['title'],
       body:json['body']
     );
+  }
+  Post toEntity() {
+    return Post(id: id, title: title, body: body, userId: userId);
   }
   Map<String,dynamic> toJson(){
     return{
