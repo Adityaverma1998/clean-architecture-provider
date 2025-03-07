@@ -4,13 +4,13 @@ import 'package:clean_architecture_provider/domain/entity/post.dart';
 import 'package:dio/dio.dart';
 
 class PostApi {
-  final DioClient dioClient;
+  final DioClient _dioClient;
 
-  PostApi({required this.dioClient});
+  PostApi(  this._dioClient);
 
   Future<List<Post>> getPosts() async {
     try {
-      final response = await dioClient.get('/posts');
+      final response = await _dioClient.get('/posts');
 
 
       List<Post> posts =

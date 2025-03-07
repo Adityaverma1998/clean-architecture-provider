@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clean_architecture_provider/core/data/network/network_error_model.dart';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 
 class NetworkException extends Equatable implements Exception {
   late final String message;
