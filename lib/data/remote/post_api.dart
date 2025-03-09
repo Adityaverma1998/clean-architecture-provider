@@ -20,6 +20,8 @@ class PostApi {
               ) // Convert PostModal → Post
               .toList();
 
+              print("Check posts are  ${posts}");
+
       return posts;
     } catch (e) {
       print("Error fetching posts: $e");
