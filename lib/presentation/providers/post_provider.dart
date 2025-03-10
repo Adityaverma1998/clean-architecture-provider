@@ -1,11 +1,13 @@
 import 'package:clean_architecture_provider/domain/entity/post.dart';
+import 'package:clean_architecture_provider/domain/usecase/posts/create_post_usecase.dart';
 import 'package:clean_architecture_provider/domain/usecase/posts/get_posts_usecase.dart';
 import 'package:flutter/material.dart';
 
 class PostProvider with ChangeNotifier {
   final GetPostsUseCase _getPostsUseCase;
+  final CreatePostUsecase _createPostUsecase;
 
-  PostProvider(this._getPostsUseCase);
+  PostProvider(this._getPostsUseCase,this._createPostUsecase);
 
   List<Post> _posts = [];
   bool _isPostLoading = false;
@@ -30,6 +32,26 @@ class PostProvider with ChangeNotifier {
       _isPostLoading = false;
       _errorMessage = 'Failed to fetch posts: $e';
       notifyListeners();
+    }
+  }
+
+   bool _isPostCreateLoading = false;
+   bool get isPostCreateLoading => _isPostCreateLoading;
+
+  Future<void> createPost(String title,String description) async{
+    try {
+       _isPostCreateLoading = true;
+      _errorMessage = null; 
+      notifyListeners();
+      CreatePostParams _createPostParams = CreatePostParams(title:title,body: description,userId: 1);
+      _isPostCreateLoading = false;
+
+      final result = await _createPostUsecase.call(params: _createPostParams);
+    } catch (e) {
+         _isPostCreateLoading = false;
+       _errorMessage = 'Failed to fetch posts: $e';
+       notifyListeners();
+      print(e); 
     }
   }
 }
