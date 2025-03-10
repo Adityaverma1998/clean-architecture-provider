@@ -7,7 +7,7 @@ class PostProvider with ChangeNotifier {
   final GetPostsUseCase _getPostsUseCase;
   final CreatePostUsecase _createPostUsecase;
 
-  PostProvider(this._getPostsUseCase,this._createPostUsecase);
+  PostProvider(this._getPostsUseCase, this._createPostUsecase);
 
   List<Post> _posts = [];
   bool _isPostLoading = false;
@@ -25,7 +25,7 @@ class PostProvider with ChangeNotifier {
       notifyListeners();
 
       final result = await _getPostsUseCase.call();
-      _posts = result;  // Assuming result is a List<Post>
+      _posts = result; // Assuming result is a List<Post>
       _isPostLoading = false;
       notifyListeners();
     } catch (e) {
@@ -35,23 +35,32 @@ class PostProvider with ChangeNotifier {
     }
   }
 
-   bool _isPostCreateLoading = false;
-   bool get isPostCreateLoading => _isPostCreateLoading;
+  bool _isPostCreateLoading = false;
+  bool get isPostCreateLoading => _isPostCreateLoading;
 
-  Future<void> createPost(String title,String description) async{
+  Future<void> createPost(String title, String description) async {
     try {
-       _isPostCreateLoading = true;
-      _errorMessage = null; 
-      notifyListeners();
-      CreatePostParams _createPostParams = CreatePostParams(title:title,body: description,userId: 1);
-      _isPostCreateLoading = false;
+      _isPostCreateLoading = true;
+      _errorMessage = null;
+      notifyListeners(); // ✅ Notify UI that loading started
 
-      final result = await _createPostUsecase.call(params: _createPostParams);
+      CreatePostParams _createPostParams = CreatePostParams(
+        title: title,
+        body: description,
+        userId: 1,
+      );
+
+      final result = await _createPostUsecase.call(
+        params: _createPostParams,
+      ); // ✅ Wait for API response
+
+      _isPostCreateLoading = false; // ✅ Set false after API call completes
+      notifyListeners();
     } catch (e) {
-         _isPostCreateLoading = false;
-       _errorMessage = 'Failed to fetch posts: $e';
-       notifyListeners();
-      print(e); 
+      _isPostCreateLoading = false;
+      _errorMessage = 'Failed to create post: $e';
+      notifyListeners();
+      print(e);
     }
   }
 }

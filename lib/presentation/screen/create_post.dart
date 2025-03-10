@@ -44,13 +44,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             const Text("Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             InputField(controller: _descriptionController, ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Handle post creation logic here
-                postProvider.createPost(_titleController.text,_descriptionController.text);
-              },
-              child:  Text( postProvider.isPostCreateLoading ? "loading" : "Submit"),
-            ),
+            Selector<PostProvider,bool>(
+              selector: (_, provider) => provider.isPostCreateLoading,
+              builder: (context, isLoading, child) {
+                     print("check create loder is work or not $isLoading");
+               return ElevatedButton(
+                onPressed: () {
+                  // Handle post creation logic here
+                  postProvider.createPost(_titleController.text,_descriptionController.text);
+                },
+                child:  Text( isLoading ? "loading" : "Submit"),
+              );
+              }
+            )
+  
           ],
         ),
       ),
